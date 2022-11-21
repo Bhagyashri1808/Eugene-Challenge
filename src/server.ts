@@ -26,7 +26,7 @@ app.get("/", async (_: Request, res: Response) => {
 });
 
 app.get("/appointments", async (_: Request, res: Response) => {
-  if (!cachedData) {
+  if (!cachedData || cachedData.length === 0) {
     const data = await fs.readFile('data.json');
     cachedData = JSON.parse(data.toString());
   }

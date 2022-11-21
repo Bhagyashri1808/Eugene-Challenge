@@ -1,6 +1,6 @@
 import React, { LabelHTMLAttributes } from 'react';
 
-const Header = ({ handleAddNewEntry }) => {
+const Header = ({ handleAddNewEntry, handleChange, selectedIndex }) => {
 
     const handleButtonClick = () => {
         const newEntry = {
@@ -18,12 +18,16 @@ const Header = ({ handleAddNewEntry }) => {
         handleAddNewEntry(newEntry);
     }
 
+    const change = (event) => {
+        handleChange(parseInt(event.target.value));
+    }
+
     return (<div style={{ display: "flex", height: "40px" }}>
         <h3>List</h3>
         <label htmlFor="groupBy">Group By:</label>
-        <select id="groupBy">
-            <option>Appointment Date</option>
-            <option>Clinician Name</option>
+        <select id="groupBy" onChange={change} value={selectedIndex}>
+            <option value="1">Appointment Date</option>
+            <option value="2">Clinician Name</option>
         </select>
         <button onClick={handleButtonClick}>Add</button>
     </div>)

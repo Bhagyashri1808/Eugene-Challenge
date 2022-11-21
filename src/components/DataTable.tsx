@@ -6,14 +6,16 @@ import Header from './Header';
 const DataTable = () => {
 
     const [patientData, setPatientData] = useState(new Array<Patient>());
-    const fetchData = async (sortBy: string) => {
+    const [selectedIndex, setSelectedIndex] = useState(1);
+
+    const fetchData = async (sortBy: number) => {
         const response = await getList(sortBy);
         setPatientData(response);
     };
 
     useEffect(() => {
-        fetchData('');
-    }, []);
+        fetchData(selectedIndex);
+    }, [selectedIndex]);
 
     const getTableRow = (item: Patient) => {
         const startDate = new Date(item.startDate);
@@ -33,19 +35,22 @@ const DataTable = () => {
     }
 
     const handleAddNewEntry = async (newEntry: Patient) => {
-
-        const data = await addNewEntry(newEntry);
+        const data = await addNewEntry(newEntry, selectedIndex);
         setPatientData(data);
     }
 
     const handleDelete = async (id: string) => {
-        const data = await deleteEntry(id);
+        const data = await deleteEntry(id, selectedIndex);
         setPatientData(data);
+    }
+
+    const handleChange = (index: number) => {
+        setSelectedIndex(index)
     }
 
     return (
         <div>
-            <Header handleAddNewEntry={handleAddNewEntry} />
+            <Header handleAddNewEntry={handleAddNewEntry} handleChange={handleChange} selectedIndex={selectedIndex} />
             <table>
                 <thead>
                     <tr>
@@ -57,7 +62,7 @@ const DataTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {patientData.length > 1 && patientData.map(item => {
+                    {patientData.length > 0 && patientData.map(item => {
                         return getTableRow(item);
                     })}
 
